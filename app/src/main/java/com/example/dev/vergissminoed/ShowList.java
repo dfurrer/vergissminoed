@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 public class ShowList extends ListActivity {
@@ -21,15 +22,13 @@ public class ShowList extends ListActivity {
         setContentView(R.layout.activity_show_list);
 
         // Set up ListView example
-        String[] items = new String[20];
-        for (int i = 0; i < items.length; i++) {
-            items[i] = "Item " + (i + 1);
-        }
+        ArrayList<String> items = new ArrayList<String>(
+                Arrays.asList("Milk", "Toilet paper", "Yoghurt", "Nespresso"));
 
         mAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1,
                 android.R.id.text1,
-                new ArrayList<String>(Arrays.asList(items)));
+                items);
         setListAdapter(mAdapter);
 
         ListView listView = getListView();
