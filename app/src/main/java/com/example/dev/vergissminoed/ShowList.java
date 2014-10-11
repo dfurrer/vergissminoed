@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,14 +15,9 @@ import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.HashMap;
-import java.util.HashSet;
-import android.util.Pair;
-import 	java.io.File;
+import java.io.File;
+
 import android.os.Environment;
-
-
-import android.content.Context;
 
 
 public class ShowList extends ListActivity {
@@ -30,18 +26,17 @@ public class ShowList extends ListActivity {
     private String url1 = "http://vergissminoed.appspot.com/?customerid=";
     private String userId = "156290";
     private HandleJSON obj;
-    private String filename = "data_vergiss";
+    private String filename = "data_vergiss2";
     private ArrayList<Pair<Date, ArrayList<String>>> data;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_list);
-        try{
+        try {
             // restore data
             //check whether data is available
             restore();
-            if (data ==null)
-            {
+            if (data == null) {
                 refresh();
             }
 
@@ -49,13 +44,12 @@ public class ShowList extends ListActivity {
             Date d = dateFormat.parse("2014-10-10");
 
             //find todays list
-            Pair<Date, ArrayList<String>> items=data.get(0);
-            for(int i=0; i< data.size() && !data.get(i).first.equals(d); i++){
+            Pair<Date, ArrayList<String>> items = data.get(0);
+            for (int i = 0; i < data.size() && !data.get(i).first.equals(d); i++) {
                 items = data.get(i);
             }
             //ArrayList<String> items  = new ArrayList<String>(
             //       Arrays.asList("Milk", "Toilet paper", "Yoghurt", "Nespresso"));
-
 
 
             mAdapter = new ArrayAdapter<String>(this,
@@ -90,7 +84,7 @@ public class ShowList extends ListActivity {
             // Setting this scroll listener is required to ensure that during ListView scrolling,
             // we don't look for swipes.
             listView.setOnScrollListener(touchListener.makeScrollListener());
-        }catch (Exception e) {
+        } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -103,18 +97,18 @@ public class ShowList extends ListActivity {
                 Toast.LENGTH_SHORT).show();
     }
 
-    private void refresh (){
-        obj = new HandleJSON(url1+userId);
+    private void refresh() {
+        obj = new HandleJSON(url1 + userId);
         obj.fetchJSON();
-        while(obj.parsingComplete);
+        while (obj.parsingComplete) ;
         //Date today = new Date();
         data = obj.getData();
         store();
 
     }
 
-    private void store (){
-       /* try {
+    private void store() {
+        try {
 
             File path = Environment.getExternalStoragePublicDirectory(
                     Environment.DIRECTORY_MOVIES);
@@ -122,21 +116,21 @@ public class ShowList extends ListActivity {
             ObjectOutputStream objOut = new ObjectOutputStream(new FileOutputStream(new File(path, "/" + filename)));
             objOut.writeObject(data);
             objOut.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        }
     }
 
-    private void restore(){
-    /*    try {
+    private void restore() {
+        try {
             File path = Environment.getExternalStoragePublicDirectory(
                     Environment.DIRECTORY_MOVIES);
 
             ObjectInputStream objIn = new ObjectInputStream(new FileInputStream(new File(path, "/" + filename)));
-            data = (ArrayList<Pair<Date, ArrayList<String>>>)objIn.readObject();
+            data = (ArrayList<Pair<Date, ArrayList<String>>>) objIn.readObject();
             objIn.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        }
     }
 }
