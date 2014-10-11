@@ -26,8 +26,17 @@ class MainHandler(webapp2.RequestHandler):
     def get(self):
         #resp = requests.get(url=base_url + 'customerids')
         #customerids = json.loads(resp.text)
-        self.response.write(json.dumps(
-            {"2014-10-10": ["Milk", "Toilet paper", "Yoghurt", "Nespresso"]}))
+        customerid = self.request.get('customerid')
+
+        self.response.write(json.dumps({'customerid':customerid}))
+        #self.response.write(json.dumps(
+        #    {"2014-10-10": ["Milk", "Toilet paper", "Yoghurt", "Nespresso"]}))
+
+    def find_consumed_items(customerid, date):
+      """
+      returns items which has been consumed by the date and need to be renewed
+      """
+
         
 
 app = webapp2.WSGIApplication([
