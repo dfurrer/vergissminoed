@@ -7,6 +7,7 @@ import datetime
 import copy
 
 product_names_backfill = {
+"7610200035196": "Valflora Milch UHT",
 "7617012070261": "Züribieter Vollmilch",
 "7613269012146": "Creme zum Kochen",
 "7616700018332": "Semmeli",
@@ -271,4 +272,4 @@ class Database(object):
     else:
       if productid in product_names_backfill:
         return product_names_backfill[productid]
-      return 'Not_specified'
+      return productid
