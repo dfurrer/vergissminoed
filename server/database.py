@@ -127,6 +127,9 @@ class Database(object):
     for pos_filename in pos_filenames:
       customerid = self.re_json.sub(r'\1', pos_filename)
       with open(os.path.join(pos_dir , pos_filename), 'r') as f:
+        if pos_filename == 'flavio.json':
+          continue
+
         text = f.read()
         self.pos[customerid] = json.loads(text)
 
