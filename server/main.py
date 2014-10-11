@@ -49,6 +49,7 @@ class MainHandler(webapp2.RequestHandler):
               repr(customerid), '156290'))
           return
 
+        db.pull_pos(customerid)
         db.compute_customer_model(customerid)
         date_of_last_purchase = datetime.datetime(2014, 9, 29, 0, 0)
 
