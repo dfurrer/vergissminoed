@@ -272,4 +272,4 @@ class Database(object):
     else:
       if productid in product_names_backfill:
         return product_names_backfill[productid]
-      return 'Not_specified'
+      return productid
