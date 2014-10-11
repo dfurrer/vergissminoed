@@ -14,7 +14,6 @@ import java.text.SimpleDateFormat;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import android.annotation.SuppressLint;
-import android.util.Pair;
 
 public class HandleJSON {
 
