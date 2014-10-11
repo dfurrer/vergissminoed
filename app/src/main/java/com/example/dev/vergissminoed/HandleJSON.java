@@ -89,7 +89,8 @@ public class HandleJSON {
                 return null;
             }
 
-            protected void onPostExecute(Long result) {
+            @Override
+            protected void onPostExecute(Void params) {
                 parentList.refreshCallBack();
             }
 
