@@ -20,23 +20,8 @@ def main():
   db = Database()
   db.load(data_dir)
 
-  customerid =  db.customerids[3]
-  purchase = db.pos[customerid][2]
-
-  assert purchase['quantNorm'] == 1
-  assert purchase['migrosEan'] == u'7616700197884'
-
-  productid = purchase['migrosEan']
-  product = db.products[productid]
-
-  products_without_name = []
-  for productid in db.productids:
-    if db.products[productid]['name'] == 'Not_specified':
-      products_without_name.append(productid)
-
   # customer model
   db.count_threshold = 2
-  db.compute_all_customer_models()
 
   # find a customer with max number of purchases
   most_frequent_customer = None
@@ -46,14 +31,20 @@ def main():
       most_frequent_customer = customerid
       max_purchases_count = len(purchases)
 
+  # analyze customer
   customerid = most_frequent_customer
+  #customerid = 'flavio'
   date_of_last_purchase = db.pos[customerid][-1]['date']
 
-  print 'Most frequent customer: %s' % customerid
+  db.compute_customer_model(customerid)
+
+  print 'Customer: %s' % customerid
   print 'Date of last purchase: %s' % repr(date_of_last_purchase)
 
   print '\nSuggestions for the one week later:'
   one_week_later = date_of_last_purchase + datetime.timedelta(days = 7)
+  assert (one_week_later - date_of_last_purchase).days >= 6
+
   suggestions = db.suggest(customerid, one_week_later)
 
   for suggestion in suggestions:
