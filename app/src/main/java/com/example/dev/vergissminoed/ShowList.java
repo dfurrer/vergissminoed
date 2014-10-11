@@ -32,30 +32,72 @@ public class ShowList extends ListActivity {
     private String url1 = "http://vergissminoed.appspot.com/?customerid=";
     private String userId = "156290";
     private HandleJSON obj;
-    private String filename = "data_vergiss";
+    private String filename = "data_vergiss3";
     private ArrayList<Pair<Date, ArrayList<String>>> data;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_list);
-
-
-        try {
             // restore data
             //check whether data is available
             restore();
             if (data == null) {
                 refresh();
+            }else
+            {
+                populateList();
             }
 
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+    }
+
+    @Override
+    protected void onListItemClick(ListView listView, View view, int position, long id) {
+        Toast.makeText(this,
+                "Clicked " + getListAdapter().getItem(position).toString(),
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.login, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        if (item.getItemId() == R.id.refresh) {
+            refresh();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void refresh() {
+        obj = new HandleJSON(url1 + userId, this);
+        obj.fetchJSON();
+    }
+
+    public void refreshCallBack() {
+        data = obj.getData();
+        store();
+        populateList();
+    }
+
+    private void populateList (){
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try{
             Date d = dateFormat.parse("2014-10-10");
+
 
             //find todays list
             Pair<Date, ArrayList<String>> items = data.get(0);
             for (int i = 0; i < data.size() && !data.get(i).first.equals(d); i++) {
                 items = data.get(i);
             }
+
             //ArrayList<String> items  = new ArrayList<String>(
             //       Arrays.asList("Milk", "Toilet paper", "Yoghurt", "Nespresso"));
 
@@ -96,39 +138,6 @@ public class ShowList extends ListActivity {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-    }
-
-    @Override
-    protected void onListItemClick(ListView listView, View view, int position, long id) {
-        Toast.makeText(this,
-                "Clicked " + getListAdapter().getItem(position).toString(),
-                Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.login, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        if (item.getItemId() == R.id.refresh) {
-            refresh();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void refresh() {
-        obj = new HandleJSON(url1 + userId);
-        obj.fetchJSON();
-        while (obj.parsingComplete) ;
-        //Date today = new Date();
-        data = obj.getData();
-        store();
-
     }
 
     private void store() {

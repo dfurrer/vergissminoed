@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.text.SimpleDateFormat;
+import android.os.AsyncTask;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,10 +21,11 @@ public class HandleJSON {
     private ArrayList<Pair<Date, ArrayList<String>>> data;
     private String urlString = null;
 
-    public volatile boolean parsingComplete = true;
+    private ShowList parentList;
 
-    public HandleJSON(String url) {
+    public HandleJSON(String url, ShowList parent) {
         this.urlString = url;
+        this.parentList = parent;
     }
 
     public ArrayList<Pair<Date, ArrayList<String>>> getData() {
@@ -53,7 +55,7 @@ public class HandleJSON {
 
             }
 
-            parsingComplete = false;
+            parentList.refreshCallBack();
 
 
         } catch (Exception e) {
@@ -64,9 +66,9 @@ public class HandleJSON {
     }
 
     public void fetchJSON() {
-        Thread thread = new Thread(new Runnable() {
+        new AsyncTask<Void, Void, Void>() {
             @Override
-            public void run() {
+            public Void doInBackground(Void... Params) {
                 try {
                     URL url = new URL(urlString);
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -86,10 +88,15 @@ public class HandleJSON {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                return null;
             }
-        });
 
-        thread.start();
+            protected void onPostExecute(Long result) {
+                parentList.refreshCallBack();
+            }
+
+
+        }.execute();
     }
 
     static String convertStreamToString(java.io.InputStream is) {
