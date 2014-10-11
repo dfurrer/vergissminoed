@@ -55,8 +55,6 @@ public class HandleJSON {
 
             }
 
-            parentList.refreshCallBack();
-
 
         } catch (Exception e) {
             // TODO Auto-generated catch block
