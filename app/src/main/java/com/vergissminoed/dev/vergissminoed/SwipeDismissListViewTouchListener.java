@@ -1,4 +1,4 @@
-package com.example.dev.vergissminoed;
+package com.vergissminoed.dev.vergissminoed;
 
 /*
  * Copyright 2013 Google Inc.

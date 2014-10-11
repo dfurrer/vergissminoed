@@ -1,4 +1,4 @@
-package com.example.dev.vergissminoed;
+package com.vergissminoed.dev.vergissminoed;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -6,8 +6,6 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.text.SimpleDateFormat;
 import android.os.AsyncTask;

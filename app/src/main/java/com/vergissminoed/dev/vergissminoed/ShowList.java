@@ -1,4 +1,4 @@
-package com.example.dev.vergissminoed;
+package com.vergissminoed.dev.vergissminoed;
 
 import android.app.ListActivity;
 import android.os.Bundle;
@@ -21,9 +21,6 @@ import java.io.ObjectOutputStream;
 import java.io.File;
 
 import android.os.Environment;
-
-
-import android.content.Context;
 
 
 public class ShowList extends ListActivity {

@@ -1,4 +1,4 @@
-package com.example.dev.vergissminoed;
+package com.vergissminoed.dev.vergissminoed;
 
 import java.io.Serializable;
 /**
