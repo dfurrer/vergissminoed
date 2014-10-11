@@ -115,7 +115,7 @@ class MainHandler(webapp2.RequestHandler):
             prejson[datestr] = [suggestion['name'] for suggestion in suggestions]
 
 
-          self.response.write(json.dumps(response))
+          self.response.write(json.dumps(prejson))
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler)
