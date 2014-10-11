@@ -21,6 +21,7 @@ import json, requests
 import glob
 from collections import defaultdict
 import datetime
+import cgi
 
 from database import Database
 
@@ -68,7 +69,18 @@ class MainHandler(webapp2.RequestHandler):
           for suggestion in suggestions:
             response[datestr].append(suggestion['name'])
 
-        self.response.write(json.dumps(response))
+        out = self.request.get('out') 
+        if out == 'html':
+          lines = ['<html><head></head><body><table border=1>']
+          lines.append('<tr><td>Date</td><td>Item</td></tr>')
+          for (datestr, lst) in response.iteritems():
+            lines.append('<tr><td>%s</td><td>%s</td></tr>'%(
+              datestr, cgi.escape(repr(lst))))
+
+          lines.append('</body></html>')
+          self.response.write('\n'.join(lines))
+        else:
+          self.response.write(json.dumps(response))
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler)
