@@ -50,6 +50,7 @@ class MainHandler(webapp2.RequestHandler):
 
         db.compute_customer_model(customerid)
         date_of_last_purchase = datetime.datetime(2014, 9, 29, 0, 0)
+
         one_week_later = date_of_last_purchase + datetime.timedelta(days = 7)
         one_month_later = date_of_last_purchase + datetime.timedelta(days = 30)
 
@@ -57,9 +58,17 @@ class MainHandler(webapp2.RequestHandler):
 
         suggestions = db.suggest(customerid, now) 
 
-        for suggestion in suggestions:
-          suggestion['latest'] = suggestion['latest'].strftime('%Y-%m-%d')
-        self.response.write(json.dumps(suggestions))
+        response = {}
+        for days in range(0, 31):
+          date = date_of_last_purchase + datetime.timedelta(days = days)
+          suggestions = db.suggest(customerid, date) 
+          datestr = date.strftime('%Y-%m-%d')
+          response[datestr] = []
+
+          for suggestion in suggestions:
+            response[datestr].append(suggestion['name'])
+
+        self.response.write(json.dumps(response))
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler)
