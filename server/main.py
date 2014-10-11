@@ -94,7 +94,7 @@ class MainHandler(webapp2.RequestHandler):
               lines.append(''.join([
                 '<tr>',
                 date_cell,
-                '<td>%s</td>' % cgi.escape(suggestion['name']),
+                '<td>%s</td>' % cgi.escape(repr(suggestion['name'])),
                 '<td>%d</td>' % suggestion['days'],
                 '<td>%.2f</td>' % suggestion['stock'],
                 '<td>%d</td>' % suggestion['last_stock'],
