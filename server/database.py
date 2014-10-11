@@ -4,6 +4,7 @@ import os
 import re
 import json
 import datetime
+import copy
 
 product_names_backfill = {
 "7617012070261": "Züribieter Vollmilch",
@@ -246,15 +247,17 @@ class Database(object):
       stock = float(product_model['last_stock']) - float(days) * product_model['consumption_rate']
 
       if stock <= 0.0:
-        suggestions.append({
-          'productid': productid, 
-          'name': self.products[productid]['name'],
-          'last_stock': product_model['last_stock'],
-          'latest': product_model['latest'],
-          'days': days,
-          'stock': float('%.2f' % stock),
-          'consumption_rate': float('%.2f' % product_model['consumption_rate'])
-        })
+        suggestion = copy.copy(product_model)
+        suggestion['productid'] = productid
+        suggestion['days'] = days
+        suggestion['stock'] = stock
+
+        suggestions.append(suggestion)
+
+    def inv_cmp_on_count(me, other):
+      return other['count'] - me['count']
+
+    suggestions.sort(inv_cmp_on_count)
 
     return suggestions
 

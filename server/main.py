@@ -64,22 +64,57 @@ class MainHandler(webapp2.RequestHandler):
           date = date_of_last_purchase + datetime.timedelta(days = days)
           suggestions = db.suggest(customerid, date) 
           datestr = date.strftime('%Y-%m-%d')
-          response[datestr] = []
-
-          for suggestion in suggestions:
-            response[datestr].append(suggestion['name'])
+          response[datestr] = suggestions
 
         out = self.request.get('out') 
         if out == 'html':
-          lines = ['<html><head></head><body><table border=1>']
-          lines.append('<tr><td>Date</td><td>Item</td></tr>')
-          for (datestr, lst) in response.iteritems():
-            lines.append('<tr><td>%s</td><td>%s</td></tr>'%(
-              datestr, cgi.escape(repr(lst))))
+          lines = ['<html><head></head><body>']
+
+          lines.append('<table border=1>')
+          lines.append(''.join([
+            '<tr>',
+            '<td>Date</td>',
+            '<td>Item</td>',
+            '<td>Days</td>',
+            '<td>Stock</td>',
+            '<td>Last stock</td>',
+            '<td>Rate</td>',
+            '<td># purchases</td>',
+            '<td>Latest</td>',
+            '<td>Earliest</td>',
+            '<td>Sum quant</td>',
+            '</tr>']))
+
+          for (datestr, suggestions) in response.iteritems():
+            for (suggestion_i, suggestion) in enumerate(suggestions):
+              date_cell = ''
+              if suggestion_i == 0:
+                date_cell = '<td rowspan=%d>%s</td>' % (len(suggestions), datestr)
+
+              lines.append(''.join([
+                '<tr>',
+                date_cell,
+                '<td>%s</td>' % cgi.escape(suggestion['name']),
+                '<td>%d</td>' % suggestion['days'],
+                '<td>%.2f</td>' % suggestion['stock'],
+                '<td>%d</td>' % suggestion['last_stock'],
+                '<td>%.2f</td>' % suggestion['consumption_rate'],
+                '<td>%d</td>' % suggestion['count'],
+                '<td>%s</td>' % suggestion['latest'].strftime('%Y-%m-%d'),
+                '<td>%s</td>' % suggestion['earliest'].strftime('%Y-%m-%d'),
+                '<td>%d</td>' % suggestion['sum_quant'],
+                '</tr>']))
+
+          lines.append('</table>')
 
           lines.append('</body></html>')
           self.response.write('\n'.join(lines))
         else:
+          prejson = {}
+          for (datestr, suggestions) in response.iteritems():
+            prejson[datestr] = [suggestion['name'] for suggestion in suggestions]
+
+
           self.response.write(json.dumps(response))
 
 app = webapp2.WSGIApplication([
