@@ -7,16 +7,18 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.text.SimpleDateFormat;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import android.annotation.SuppressLint;
+import android.util.Pair;
 
 public class HandleJSON {
 
-    private HashMap<Date, ArrayList<String>> data;
+    private ArrayList<Pair<Date, ArrayList<String>>> data;
     private String urlString = null;
 
     public volatile boolean parsingComplete = true;
@@ -25,7 +27,7 @@ public class HandleJSON {
         this.urlString = url;
     }
 
-    public HashMap<Date, ArrayList<String>> getData() {
+    public ArrayList<Pair<Date, ArrayList<String>>> getData() {
         return data;
     }
 
@@ -38,17 +40,18 @@ public class HandleJSON {
 
             Iterator<String> it = reader.keys();
 
-            data = new HashMap<Date, ArrayList<String>>();
+            data = new ArrayList<Pair<Date, ArrayList<String>>>(reader.length());
 
-            for (; it.hasNext(); ) {
+            for (int e=0; it.hasNext(); e++) {
                 String s = it.next();
                 Date d = dateFormat.parse(s);
-                ArrayList<String> al = new ArrayList<String>();
+                ArrayList<String> strings = new ArrayList<String>();
                 JSONArray jsonarray = reader.getJSONArray(s);
                 for (int i = 0; i < jsonarray.length(); i++) {
-                    al.add(i, jsonarray.getString(i));
+                    strings.add(jsonarray.getString(i));
                 }
-                data.put(d, al);
+                data.add(e, new Pair<Date, ArrayList<String>>(d, strings));
+
             }
 
             parsingComplete = false;
