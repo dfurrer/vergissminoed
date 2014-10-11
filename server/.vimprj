@@ -1,6 +1,6 @@
 function! Pystyle()
   let linenr=line(".")
-  :%!c:/Users/Marko/scripts/pystyle.py
+  :%!c:/Users/Marko/scripts/pystyle/src/pystyle.py
   :execute ":".linenr
 endfunction
 
