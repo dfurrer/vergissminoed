@@ -2,6 +2,9 @@ package com.example.dev.vergissminoed;
 
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -20,18 +23,23 @@ import java.io.File;
 import android.os.Environment;
 
 
+import android.content.Context;
+
+
 public class ShowList extends ListActivity {
     ArrayAdapter<String> mAdapter;
 
     private String url1 = "http://vergissminoed.appspot.com/?customerid=";
     private String userId = "156290";
     private HandleJSON obj;
-    private String filename = "data_vergiss2";
+    private String filename = "data_vergiss";
     private ArrayList<Pair<Date, ArrayList<String>>> data;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_list);
+
+
         try {
             // restore data
             //check whether data is available
@@ -97,6 +105,22 @@ public class ShowList extends ListActivity {
                 Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.login, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        if (item.getItemId() == R.id.refresh) {
+            refresh();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void refresh() {
         obj = new HandleJSON(url1 + userId);
         obj.fetchJSON();
@@ -109,11 +133,10 @@ public class ShowList extends ListActivity {
 
     private void store() {
         try {
-
             File path = Environment.getExternalStoragePublicDirectory(
                     Environment.DIRECTORY_MOVIES);
-
-            ObjectOutputStream objOut = new ObjectOutputStream(new FileOutputStream(new File(path, "/" + filename)));
+            ObjectOutputStream objOut = new ObjectOutputStream(new FileOutputStream(
+                    new File(path, "/" + filename)));
             objOut.writeObject(data);
             objOut.close();
         } catch (Exception e) {
@@ -126,7 +149,8 @@ public class ShowList extends ListActivity {
             File path = Environment.getExternalStoragePublicDirectory(
                     Environment.DIRECTORY_MOVIES);
 
-            ObjectInputStream objIn = new ObjectInputStream(new FileInputStream(new File(path, "/" + filename)));
+            ObjectInputStream objIn = new ObjectInputStream(new FileInputStream(
+                    new File(path, "/" + filename)));
             data = (ArrayList<Pair<Date, ArrayList<String>>>) objIn.readObject();
             objIn.close();
         } catch (Exception e) {
