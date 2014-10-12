@@ -23,7 +23,7 @@ import java.io.File;
 import android.os.Environment;
 
 
-public class ShowList extends ListActivity {
+public class ShowListActivity extends ListActivity {
     ArrayAdapter<String> mAdapter;
 
     private String url1 = "http://vergissminoed.appspot.com/?customerid=";
@@ -35,15 +35,14 @@ public class ShowList extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_list);
-            // restore data
-            //check whether data is available
-            restore();
-            if (data == null) {
-                refresh();
-            }else
-            {
-                populateList();
-            }
+        // restore data
+        //check whether data is available
+        restore();
+        if (data == null) {
+            refresh();
+        } else {
+            populateList();
+        }
 
 
     }
@@ -82,10 +81,10 @@ public class ShowList extends ListActivity {
         populateList();
     }
 
-    private void populateList (){
+    private void populateList() {
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        try{
+        try {
             Date d = dateFormat.parse("2014-10-10");
 
 

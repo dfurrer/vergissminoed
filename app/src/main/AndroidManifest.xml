@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme" >
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="1566666576889794" />
         <activity
-            android:name="com.vergissminoed.dev.vergissminoed.ShowList"
+            android:name=".ShowListActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,9 +21,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.vergissminoed.dev.vergissminoed.login"
+            android:name=".LoginActivity"
             android:label="@string/title_activity_login"
-            android:parentActivityName="com.vergissminoed.dev.vergissminoed.ShowList" >
+            android:parentActivityName=".ShowListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.dev.vergissminoed.ShowList" />

@@ -8,10 +8,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.text.SimpleDateFormat;
+
 import android.os.AsyncTask;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import android.annotation.SuppressLint;
 
 public class HandleJSON {
@@ -19,9 +21,9 @@ public class HandleJSON {
     private ArrayList<Pair<Date, ArrayList<String>>> data;
     private String urlString = null;
 
-    private ShowList parentList;
+    private ShowListActivity parentList;
 
-    public HandleJSON(String url, ShowList parent) {
+    public HandleJSON(String url, ShowListActivity parent) {
         this.urlString = url;
         this.parentList = parent;
     }
@@ -41,7 +43,7 @@ public class HandleJSON {
 
             data = new ArrayList<Pair<Date, ArrayList<String>>>(reader.length());
 
-            for (int e=0; it.hasNext(); e++) {
+            for (int e = 0; it.hasNext(); e++) {
                 String s = it.next();
                 Date d = dateFormat.parse(s);
                 ArrayList<String> strings = new ArrayList<String>();
